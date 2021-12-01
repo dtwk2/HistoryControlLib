@@ -1,123 +1,93 @@
 namespace HistoryControlLib.ViewModels
 {
+
     using HistoryControlLib.Interfaces;
     using System;
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
     using System.Threading;
-    using System.Windows;
 
     /// <summary>
     /// Implements a navigational list of recent locations which were recently
     /// visited and may be suggested for re-visitation.
     /// </summary>
-    internal class BrowseHistory<T> : Base.BaseViewModel, IBrowseHistory<T>
+    public class BrowseHistory<T> : Base.BaseViewModel, IBrowseHistory<T> where T : IEquatable<T>
     {
         #region fields
         const int ListLimit = 128;
-        private readonly SynchronizationContext context;
-        private readonly ObservableCollection<T> _Locations;
-        private int _SelectedIndex = -1;
+        private readonly ThreadSafeObservableCollection<T> collection = new ThreadSafeObservableCollection<T>();
+        //private int _SelectedIndex = -1;
+        private int selectedIndex;
         #endregion fields
 
-        #region ctors
-        /// <summary>
-        /// Class constructor
-        /// </summary>
-        public BrowseHistory()
-        {
-            context = SynchronizationContext.Current;
-            _Locations = new ObservableCollection<T>();
-        }
-        #endregion ctors
 
         #region properties
-        /// <summary>
-        /// Gets a list of recently visited locations.
-        /// </summary>
-        public IEnumerable<T> Locations => _Locations;
+        /// <inheritdoc/>
+        public IReadOnlyCollection<T> Collection => collection;
 
-        /// <summary>
-        /// Gets the size of the currently available list of locations.
-        /// </summary>
-        public int Count => _Locations.Count;
+        /// <inheritdoc/>
+        public int Count => collection.Count;
 
-        /// <summary>
-        /// Gets a current visiting location (if any) or
-        /// -1 if there is no current location available.
-        /// </summary>
-        public int SelectedIndex
+        public int? BackwardCount => collection.Count > 0 ? collection.Count - SelectedIndex - 1 : default;
+
+        public int? ForwardCount => collection.Count > 0 ? SelectedIndex : default;
+
+        /// <inheritdoc/>
+        public T BackwardItem => CanBackward ? collection[SelectedIndex + 1] : default(T);
+
+        /// <inheritdoc/>
+        public T ForwardItem => CanForward ? collection[SelectedIndex - 1] : default(T);
+
+        /// <inheritdoc/>
+        public bool CanForward => SelectedIndex > 0;
+
+        /// <inheritdoc/>
+        public bool CanBackward => (SelectedIndex + 1) < collection.Count;
+
+        /// <inheritdoc/>
+        protected int SelectedIndex
         {
-            get => _SelectedIndex;
+            get => selectedIndex;
             private set
             {
-                if (_SelectedIndex != value)
-                {
-                    _SelectedIndex = value;
-                    OnPropertyChanged(null);
-                }
+                selectedIndex = value;
+                NotifyPropertyChanged(() => ForwardCount);
+                NotifyPropertyChanged(() => BackwardCount);
+                NotifyPropertyChanged(() => SelectedIndex);
+                NotifyPropertyChanged(() => CurrentItem);
             }
         }
 
-        /// <summary>
-        /// Gets the currently selected item or default(t) (usually null)
-        /// if there is no currently selected item.
-        /// </summary>
-        public T SelectedItem => _SelectedIndex >= 0 && _SelectedIndex < _Locations.Count ? _Locations[_SelectedIndex] : default(T);
+        /// <inheritdoc/>
+        public T CurrentItem
+        {
+            get
+            {
+                return SelectedIndex >= 0 && SelectedIndex < collection.Count ? collection[SelectedIndex] : default;
+            }
+            set
+            {
+                if (collection.Contains(value) == false)
+                    collection.Add(value);
 
-        /// <summary>
-        /// Gets the item that would be selected next if we where to navigate back to the
-        /// next item (if any) in the current list of recent locations.
-        /// </summary>
-        public T NextBackwardItem => CanBackward == false ? default(T) : _Locations[SelectedIndex + 1];
-
-        /// <summary>
-        /// Gets the item that would be selected next if we where to navigate back to the
-        /// next item (if any) in the current list of recent locations.
-        /// </summary>
-        public T NextForwardItem => CanForward == false ? default(T) : _Locations[SelectedIndex - 1];
-
-        /// <summary>
-        /// Determines if forward navigation within the current set of locations
-        /// is possible (returns true) - based on set of locations and SelectedIndex
-        /// or not (returns false).
-        /// </summary>
-        public bool CanForward => SelectedIndex > 0;
-
-        /// <summary>
-        /// Determines if backward navigation is possible (returns true)
-        /// (based on set of locations and SelectedIndex) or not (returns false).
-        /// </summary>
-        public bool CanBackward => (SelectedIndex + 1) < _Locations.Count;
-
+                SelectedIndex = collection.IndexOf(value);
+            }
+        }
         #endregion properties
 
-        #region methods
-        /// <summary>
-        /// Removes all currently logged locations and sets:
-        /// <seealso cref="SelectedIndex"/> = -1
-        /// </summary>
-        public void ClearLocations()
-        {
-            context.Send(a =>
-            {
-                _Locations.Clear();
-                SelectedIndex = -1;
-            },null);
-        }
 
         /// <summary>
         /// Set the <seealso cref="SelectedIndex"/> property within the currently
         /// available collection of locations or throws an exception
         /// if the requested index is out of bounds.
         /// </summary>
-        public void SetSelectedIndex(int idx)
-        {
-            if (idx < 0 || (idx + 1) > _Locations.Count)
-                throw new System.ArgumentOutOfRangeException(string.Format("Index {0} out of bounds between 0 and {1}", idx, _Locations.Count));
+        //public void SetSelectedIndex(int idx)
+        //{
+        //    if (idx < 0 || (idx + 1) > _Locations.Count)
+        //        throw new System.ArgumentOutOfRangeException(string.Format("Index {0} out of bounds between 0 and {1}", idx, _Locations.Count));
 
-            SelectedIndex = idx;
-        }
+        //    SelectedIndex = idx;
+        //}
 
         /// <summary>
         /// Navigates forward in the list of currently available locations.
@@ -134,44 +104,11 @@ namespace HistoryControlLib.ViewModels
         /// All items with an index greater limit n are removed,
         /// if the list gets larger than limit n.
         /// </summary>
-        public void Forward(T newLocation)
+        public void Navigate(T newLocation)
         {
-            if (SelectedIndex >= 0)
-            {
-                if (newLocation is IEqualityComparer<T> equi)
-                {
-                    // Do nothing if a forward on the current location appears
-                    // to describe the requested location
-                    if (equi.Equals(newLocation, _Locations[SelectedIndex]))
-                        return;
-                }
-            }
 
-            if (SelectedIndex > 0)
-            {
-                // Update this item to recycle spot in list
-                ReplaceLocationAt(SelectedIndex - 1, newLocation);
-
-                for (int i = 0; i < (SelectedIndex - 1); i++) // Remove all previous items
-                    RemoveLocationAt(0);
-
-                SelectedIndex = 0;                          // Reset current position
-            }
-            else // Just insert at beginning of list
-            {
-                _SelectedIndex = -1;                   // Reset this to enforce notification on
-                InsertLocationAt(0, newLocation);     // SelectedIndex = 0;
-                SelectedIndex = 0;
-            }
-
-            if (_Locations.Count > ListLimit)        // Make sure list cannot grow beyond useful size
-            {
-                for (int i = 0; i < _Locations.Count - ListLimit; i++)
-                {
-                    RemoveLocationAt(_Locations.Count - 1);  // Always remove last element
-                }
-            }
-
+            Forward(newLocation, ref selectedIndex, collection);
+            SelectedIndex = selectedIndex;
             NotifyPropertyChanged(() => CanBackward);
             NotifyPropertyChanged(() => CanForward);
         }
@@ -203,7 +140,7 @@ namespace HistoryControlLib.ViewModels
         /// </summary>
         public bool Backward()
         {
-            if ((SelectedIndex + 1) < _Locations.Count)
+            if ((SelectedIndex + 1) < collection.Count)
             {
                 SelectedIndex++;
 
@@ -223,9 +160,9 @@ namespace HistoryControlLib.ViewModels
         {
             string ret = string.Empty;
 
-            for (int i = 0; i < _Locations.Count; i++)
+            for (int i = 0; i < collection.Count; i++)
             {
-                ret += string.Format("{0:00} ", i) + _Locations[i].ToString();
+                ret += string.Format("{0:00} ", i) + collection[i].ToString();
 
                 if (i == SelectedIndex)
                     ret += " CURRENT POSITION";
@@ -233,9 +170,57 @@ namespace HistoryControlLib.ViewModels
                 ret += '\n';
             }
 
-            ret += "\n\n" + string.Format(" CurrenPosition : {0:00}", SelectedIndex) + '\n';
+            ret += "\n\n" + string.Format(" CurrentPosition : {0:00}", SelectedIndex) + '\n';
 
             return ret;
+        }
+
+
+
+        private static void Forward(T newLocation, ref int selectedIndex, ThreadSafeObservableCollection<T> _Locations)
+        {
+            if (_Locations.Count > 0) {
+
+            //   // Do nothing if a forward on the current location appears
+            //   // to describe the requested location
+             if (newLocation.Equals(_Locations[selectedIndex]))
+                  return;
+
+            }
+
+            if (selectedIndex > 0)
+            {
+                // Update this item to recycle spot in list
+                _Locations.ReplaceAt(selectedIndex - 1, newLocation);
+
+                for (int i = 0; i < (selectedIndex - 1); i++) // Remove all previous items
+                    _Locations.RemoveAtSafe(0);
+
+                selectedIndex = 0;                          // Reset current position
+            }
+            else // Just insert at beginning of list
+            {
+                _Locations.InsertAt(0, newLocation);     // SelectedIndex = 0;
+                selectedIndex = 0;
+            }
+
+            if (_Locations.Count > ListLimit)        // Make sure list cannot grow beyond useful size
+            {
+                for (int i = 0; i < _Locations.Count - ListLimit; i++)
+                {
+                    _Locations.RemoveAtSafe(_Locations.Count - 1);  // Always remove last element
+                }
+            }
+        }
+    }
+
+    class ThreadSafeObservableCollection<T> : ObservableCollection<T>
+    {
+        private readonly SynchronizationContext context;
+
+        public ThreadSafeObservableCollection()
+        {
+            context = SynchronizationContext.Current;
         }
 
         /// <summary>
@@ -244,29 +229,43 @@ namespace HistoryControlLib.ViewModels
         /// </summary>
         /// <param name="pos"></param>
         /// <param name="item"></param>
-        private void ReplaceLocationAt(int pos, T item)
+        public void ReplaceAt(int pos, T item)
         {
             context.Send(a =>
             {
-                _Locations[pos] = item;   // Update this item to recycle spot in list
-            },null);
-        }
-
-        private void InsertLocationAt(int pos, T item)
-        {
-            context.Send(a =>
-            {
-                _Locations.Insert(pos, item);    // SelectedIndex = 0;
+                this[pos] = item;   // Update this item to recycle spot in list
             }, null);
         }
 
-        private void RemoveLocationAt(int pos)
+        public void InsertAt(int pos, T item)
         {
             context.Send(a =>
             {
-                _Locations.RemoveAt(pos);    // SelectedIndex = 0;
+                this.Insert(pos, item);    // SelectedIndex = 0;
             }, null);
         }
-        #endregion methods
+
+        public void RemoveAtSafe(int pos)
+        {
+            context.Send(a =>
+            {
+                this.RemoveAt(pos);    // SelectedIndex = 0;
+            }, null);
+        }
+
+
+        /// <summary>
+        /// Removes all currently logged locations and sets:
+        /// <seealso cref="SelectedIndex"/> = -1
+        /// </summary>
+        public void ClearSafe()
+        {
+            context.Send(a =>
+            {
+                this.Clear();
+
+            }, null);
+        }
+
     }
 }

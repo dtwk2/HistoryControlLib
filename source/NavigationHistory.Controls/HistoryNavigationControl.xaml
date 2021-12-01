@@ -1,54 +1,58 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:local="clr-namespace:HistoryControlLib.Controls" 
-                    xmlns:BHreskeys="clr-namespace:HistoryControlLib.Themes"                    >
+                    xmlns:local="clr-namespace:BrowseHistory.Controls" 
+                    xmlns:BHreskeys="clr-namespace:HistoryControlLib.Themes">
 
-
+    <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
     <ControlTemplate x:Key="HistoryNavigationControl" TargetType="{x:Type local:HistoryNavigationControl}">
-        <Viewbox>
-            
-      
-        <Grid             x:Name="MainGrid"             >
+        <Grid x:Name="MainGrid">
             <Grid.RowDefinitions>
-                <RowDefinition Height="24"/>
+                <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="24"/>
-                <ColumnDefinition Width="16"/>
-                <ColumnDefinition Width="24"/>
-                <ColumnDefinition Width="24"/>
+                <ColumnDefinition Width="2*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="2*"/>
+                <ColumnDefinition Width="2*"/>
             </Grid.ColumnDefinitions>
-
-            <Button Grid.Column="0"
+            <Viewbox Grid.Column="0">
+                <Button 
+                    x:Name="BackwardButton"
+                    Grid.Column="0"
                     Margin="3,3,0,3"
                     Command="{Binding BackwardCommand, RelativeSource={RelativeSource Mode=TemplatedParent}}"
                     HorizontalAlignment="Right" VerticalAlignment="Stretch"
                     HorizontalContentAlignment="Right" VerticalContentAlignment="Stretch"
                     Style="{DynamicResource {x:Static BHreskeys:ResourceKeys.HistoryButtonStyleKey}}"               >
-                <Button.ToolTip>
-                    <TextBlock>
+                    <Button.ToolTip>
+                        <TextBlock>
                         <TextBlock Text="Back to: "/>
                         <TextBlock Text="{Binding BackwardItemPath, RelativeSource={RelativeSource Mode=TemplatedParent}}"/>
                     </TextBlock>
-                </Button.ToolTip>
-                <Button.Content>
-                    <Grid>
-                        <Path HorizontalAlignment="Center"
+                    </Button.ToolTip>
+                    <Button.Content>
+                        <Grid>
+                            <Path HorizontalAlignment="Center"
                               Data="{DynamicResource {x:Static BHreskeys:ResourceKeys.ArrowGeometryKey}}"
                               Fill="{Binding Foreground,RelativeSource={RelativeSource AncestorType=Button}}"
                               RenderTransformOrigin=".5,.5"
                               Stretch="Uniform">
-                            <Path.RenderTransform>
-                                <TransformGroup>
-                                    <RotateTransform Angle="180" />
-                                    <ScaleTransform ScaleX="0.75" ScaleY="0.75" />
-                                </TransformGroup>
-                            </Path.RenderTransform>
-                        </Path>
-                    </Grid>
-                </Button.Content>
-            </Button>
-                <local:LocationsDropDown
+                                <Path.RenderTransform>
+                                    <TransformGroup>
+                                        <RotateTransform Angle="180" />
+                                        <ScaleTransform ScaleX="0.75" ScaleY="0.75" />
+                                    </TransformGroup>
+                                </Path.RenderTransform>
+                            </Path>
+                            <TextBlock Visibility="{Binding ShowIndices, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource BooleanToVisibilityConverter}}" 
+                                       HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="6" 
+                                       Text="{Binding BackwardCount, RelativeSource={RelativeSource Mode=TemplatedParent}}"/>
+
+                        </Grid>
+                    </Button.Content>
+                </Button>
+            </Viewbox>
+            <local:LocationsDropDown
                 x:Name="LocationsDropDown"
                 Grid.Column="1"
                 ItemsSource="{Binding Locations, RelativeSource={RelativeSource Mode=TemplatedParent}}"
@@ -64,7 +68,12 @@
                         </DataTemplate>
                     </local:LocationsDropDown.ItemTemplate>
                 </local:LocationsDropDown>
-                <Button Grid.Column="2"
+
+
+          
+                <Button 
+                    x:Name="ForwardButton"
+                    Grid.Column="2"
                     Margin="0,3,0,3"
                     Command="{Binding ForwardCommand, RelativeSource={RelativeSource Mode=TemplatedParent}}"
                     HorizontalAlignment="Left" VerticalAlignment="Stretch"
@@ -78,7 +87,8 @@
                     </TextBlock>
                 </Button.ToolTip>
                 <Button.Content>
-                    <Grid>
+                    <Viewbox Grid.Column="2">
+                        <Grid>
                         <Path HorizontalAlignment="Center"
                               Data="{DynamicResource {x:Static BHreskeys:ResourceKeys.ArrowGeometryKey}}"
                               Fill="{Binding Foreground,RelativeSource={RelativeSource AncestorType=Button}}"
@@ -91,20 +101,23 @@
                                 </TransformGroup>
                             </Path.RenderTransform>
                         </Path>
-                    </Grid>
+                            <TextBlock HorizontalAlignment="Right" VerticalAlignment="Top" FontSize="6" 
+                                       Visibility="{Binding ShowIndices, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource BooleanToVisibilityConverter}}" 
+                                       Text="{Binding ForwardCount, RelativeSource={RelativeSource Mode=TemplatedParent}}"/>
+                        </Grid>
+                    </Viewbox>
                 </Button.Content>
             </Button>
 
- 
-
-            <Button Grid.Column="3" Grid.Row="0"
+    
+            <Viewbox Grid.Column="3">
+                    <Button Grid.Column="3" Grid.Row="0"
                     Margin="3"
                     Command="{Binding UpCommand, RelativeSource={RelativeSource Mode=TemplatedParent}}"
                     ToolTip="Up"
                     HorizontalAlignment="Center" VerticalAlignment="Stretch"
                     HorizontalContentAlignment="Center" VerticalContentAlignment="Stretch"
-                    Style="{DynamicResource {x:Static BHreskeys:ResourceKeys.HistoryButtonStyleKey}}"
-                >
+                    Style="{DynamicResource {x:Static BHreskeys:ResourceKeys.HistoryButtonStyleKey}}" >
                 <Button.Content>
                     <Grid>
                         <Path HorizontalAlignment="Right"
@@ -122,8 +135,9 @@
                     </Grid>
                 </Button.Content>
             </Button>
-        </Grid>
         </Viewbox>
+        </Grid>
+
     </ControlTemplate>
 
 

@@ -1,7 +1,8 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
 
     <ResourceDictionary.MergedDictionaries>
-        <ResourceDictionary Source="pack://application:,,,/NavigationHistory.Controls;component/Styles/HistoryButtonStyle.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/BrowseHistory.Controls;component/Themes/LightBrushs.xaml" />
+        <!--<ResourceDictionary Source="pack://application:,,,/BrowseHistory.Controls;component/Styles/HistoryButtonStyle.xaml" />-->
         <!--<ResourceDictionary Source="pack://application:,,,/HistoryControlLib;component/LocationsDropDown.xaml" />-->
   
     </ResourceDictionary.MergedDictionaries>

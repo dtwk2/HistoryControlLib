@@ -7,100 +7,157 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 
-namespace HistoryControlLib.Controls
-{
-    public class HistoryNavigationControl : Control
-    {
+namespace BrowseHistory.Controls {
 
-        public static readonly DependencyProperty UpCommandProperty =
-        DependencyProperty.Register("UpCommand", typeof(ICommand), typeof(HistoryNavigationControl), new PropertyMetadata(null));
+   public delegate void HistoryNavigationEventHandler(object source, HistoryNavigationEventArgs eventArgs);
 
-        public static readonly DependencyProperty ForwardCommandProperty =
-           DependencyProperty.Register("ForwardCommand", typeof(ICommand), typeof(HistoryNavigationControl), new PropertyMetadata(null));
+   public class HistoryNavigationEventArgs : RoutedEventArgs {
+      public HistoryNavigationEventArgs(RoutedEvent routedEvent, object source, int movement, int backwardCount, int forwardCount) : base(routedEvent, source) {
+         Movement = movement;
+      }
 
-        public static readonly DependencyProperty BackwardCommandProperty =
-           DependencyProperty.Register("BackwardCommand", typeof(ICommand), typeof(HistoryNavigationControl), new PropertyMetadata(null));
+      public int Movement { get; }
+   }
 
-        public static readonly DependencyProperty BackwardPathProperty =
-           DependencyProperty.Register("BackwardPath", typeof(string), typeof(HistoryNavigationControl), new PropertyMetadata(null));
+   public class HistoryNavigationControl : Control {
 
-        public static readonly DependencyProperty ForwardPathProperty =
-            DependencyProperty.Register("ForwardPath", typeof(string), typeof(HistoryNavigationControl), new PropertyMetadata(null));
+      private LocationsDropDown locationsDropDown;
+      private Button? forwardButton;
+      private Button? backwardButton;
 
-        public static readonly DependencyProperty SelectedItemProperty =
-            DependencyProperty.Register("SelectedItem", typeof(object), typeof(HistoryNavigationControl), new PropertyMetadata(null));
+      public static readonly DependencyProperty UpCommandProperty =
+      DependencyProperty.Register("UpCommand", typeof(ICommand), typeof(HistoryNavigationControl), new PropertyMetadata(null));
 
-        public static readonly DependencyProperty LocationsProperty =
-           DependencyProperty.Register("Locations", typeof(IEnumerable), typeof(HistoryNavigationControl), new PropertyMetadata(null));
-       
-        public static readonly DependencyProperty SelectionChangedProperty =
-            DependencyProperty.Register("SelectionChanged", typeof(ICommand), typeof(HistoryNavigationControl), new PropertyMetadata(null));
-        private LocationsDropDown locationsDropDown;
+      public static readonly DependencyProperty ForwardCommandProperty =
+         DependencyProperty.Register("ForwardCommand", typeof(ICommand), typeof(HistoryNavigationControl), new PropertyMetadata(null));
 
-        static HistoryNavigationControl()
-        {
-            DefaultStyleKeyProperty.OverrideMetadata(typeof(HistoryNavigationControl), new FrameworkPropertyMetadata(typeof(HistoryNavigationControl)));
-        }
+      public static readonly DependencyProperty BackwardCommandProperty =
+         DependencyProperty.Register("BackwardCommand", typeof(ICommand), typeof(HistoryNavigationControl), new PropertyMetadata(null));
 
-        public override void OnApplyTemplate()
-        {
-            locationsDropDown = this.GetTemplateChild("LocationsDropDown") as LocationsDropDown;
-            locationsDropDown.SelectionChanged += LocationsDropDown_SelectionChanged;
-            base.OnApplyTemplate();
-        }
+      public static readonly DependencyProperty BackwardPathProperty =
+         DependencyProperty.Register("BackwardPath", typeof(string), typeof(HistoryNavigationControl), new PropertyMetadata(null));
 
-        private void LocationsDropDown_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            SelectionChanged.Execute(e.AddedItems);
-        }
+      public static readonly DependencyProperty ForwardPathProperty =
+          DependencyProperty.Register("ForwardPath", typeof(string), typeof(HistoryNavigationControl), new PropertyMetadata(null));
 
-        public ICommand UpCommand
-        {
-            get { return (ICommand)GetValue(UpCommandProperty); }
-            set { SetValue(UpCommandProperty, value); }
-        }
+      public static readonly DependencyProperty BackwardCountProperty =
+          DependencyProperty.Register("BackwardCount", typeof(int), typeof(HistoryNavigationControl), new PropertyMetadata(0, Changed));
 
-        public ICommand ForwardCommand
-        {
-            get { return (ICommand)GetValue(ForwardCommandProperty); }
-            set { SetValue(ForwardCommandProperty, value); }
-        }
+      public static readonly DependencyProperty ForwardCountProperty =
+        DependencyProperty.Register("ForwardCount", typeof(int), typeof(HistoryNavigationControl), new PropertyMetadata(0));
 
-        public ICommand BackwardCommand
-        {
-            get { return (ICommand)GetValue(BackwardCommandProperty); }
-            set { SetValue(BackwardCommandProperty, value); }
-        }
+      public static readonly DependencyProperty SelectedItemProperty =
+          DependencyProperty.Register("SelectedItem", typeof(object), typeof(HistoryNavigationControl), new PropertyMetadata(null));
 
-        public string BackwardPath
-        {
-            get { return (string)GetValue(BackwardPathProperty); }
-            set { SetValue(BackwardPathProperty, value); }
-        }
+      public static readonly DependencyProperty LocationsProperty =
+         DependencyProperty.Register("Locations", typeof(IEnumerable), typeof(HistoryNavigationControl), new PropertyMetadata(null));
 
-        public string ForwardPath
-        {
-            get { return (string)GetValue(ForwardPathProperty); }
-            set { SetValue(ForwardPathProperty, value); }
-        }
+      public static readonly DependencyProperty SelectionChangedProperty =
+          DependencyProperty.Register("SelectionChanged", typeof(ICommand), typeof(HistoryNavigationControl), new PropertyMetadata(null));
 
-        public object SelectedItem
-        {
-            get { return (object)GetValue(SelectedItemProperty); }
-            set { SetValue(SelectedItemProperty, value); }
-        }
+      public static readonly DependencyProperty ShowIndicesProperty =
+          DependencyProperty.Register("ShowIndices", typeof(bool), typeof(HistoryNavigationControl), new PropertyMetadata(true));
 
-        public IEnumerable Locations
-        {
-            get { return (IEnumerable)GetValue(LocationsProperty); }
-            set { SetValue(LocationsProperty, value); }
-        }
-        public ICommand SelectionChanged
-        {
-            get { return (ICommand)GetValue(SelectionChangedProperty); }
-            set { SetValue(SelectionChangedProperty, value); }
-        }
+      public static readonly RoutedEvent NavigationEvent = EventManager.RegisterRoutedEvent(nameof(Complete), RoutingStrategy.Bubble, typeof(HistoryNavigationEventHandler), typeof(HistoryNavigationControl));
 
 
-    }
+
+      private static void Changed(DependencyObject d, DependencyPropertyChangedEventArgs e) {
+         if (d is HistoryNavigationControl cee) {
+
+         }
+      }
+
+
+      static HistoryNavigationControl() {
+         DefaultStyleKeyProperty.OverrideMetadata(typeof(HistoryNavigationControl), new FrameworkPropertyMetadata(typeof(HistoryNavigationControl)));
+      }
+
+      public override void OnApplyTemplate() {
+         locationsDropDown = GetTemplateChild("LocationsDropDown") as LocationsDropDown;
+         forwardButton = GetTemplateChild("ForwardButton") as Button;
+         if (forwardButton is Button)
+            forwardButton.Click += ForwardButton_Click;
+         backwardButton = GetTemplateChild("ForwardButton") as Button;
+         if (backwardButton is Button)
+            backwardButton.Click += BackwardButton_Click;    
+  
+
+         locationsDropDown.SelectionChanged += LocationsDropDown_SelectionChanged;
+         base.OnApplyTemplate();
+      }
+
+      private void ForwardButton_Click(object sender, RoutedEventArgs e) {
+         this.RaiseEvent(new HistoryNavigationEventArgs(NavigationEvent, this, 1, BackwardCount, ForwardCount));
+      }
+
+      private void BackwardButton_Click(object sender, RoutedEventArgs e) {
+         this.RaiseEvent(new HistoryNavigationEventArgs(NavigationEvent, this, 1, BackwardCount, ForwardCount));
+      }
+
+      private void LocationsDropDown_SelectionChanged(object sender, SelectionChangedEventArgs e) {
+         SelectionChanged.Execute(e.AddedItems);
+      }
+
+      #region properties
+      public ICommand UpCommand {
+         get { return (ICommand)GetValue(UpCommandProperty); }
+         set { SetValue(UpCommandProperty, value); }
+      }
+
+      public ICommand ForwardCommand {
+         get { return (ICommand)GetValue(ForwardCommandProperty); }
+         set { SetValue(ForwardCommandProperty, value); }
+      }
+
+      public ICommand BackwardCommand {
+         get { return (ICommand)GetValue(BackwardCommandProperty); }
+         set { SetValue(BackwardCommandProperty, value); }
+      }
+
+      public string BackwardPath {
+         get { return (string)GetValue(BackwardPathProperty); }
+         set { SetValue(BackwardPathProperty, value); }
+      }
+
+      public string ForwardPath {
+         get { return (string)GetValue(ForwardPathProperty); }
+         set { SetValue(ForwardPathProperty, value); }
+      }
+      public int ForwardCount {
+         get { return (int)GetValue(ForwardCountProperty); }
+         set { SetValue(ForwardCountProperty, value); }
+      }
+      public int BackwardCount {
+         get { return (int)GetValue(BackwardCountProperty); }
+         set { SetValue(BackwardCountProperty, value); }
+      }
+
+      public bool ShowIndices {
+         get { return (bool)GetValue(ShowIndicesProperty); }
+         set { SetValue(ShowIndicesProperty, value); }
+      }
+
+      public object SelectedItem {
+         get { return GetValue(SelectedItemProperty); }
+         set { SetValue(SelectedItemProperty, value); }
+      }
+
+      public IEnumerable Locations {
+         get { return (IEnumerable)GetValue(LocationsProperty); }
+         set { SetValue(LocationsProperty, value); }
+      }
+      public ICommand SelectionChanged {
+         get { return (ICommand)GetValue(SelectionChangedProperty); }
+         set { SetValue(SelectionChangedProperty, value); }
+      }
+
+      public event HistoryNavigationEventHandler Complete {
+         add => this.AddHandler(HistoryNavigationControl.NavigationEvent, value);
+         remove => this.RemoveHandler(HistoryNavigationControl.NavigationEvent, value);
+      }
+
+      #endregion properties
+
+   }
 }

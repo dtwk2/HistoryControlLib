@@ -1,9 +1,7 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:local="clr-namespace:HistoryControlLib.Controls"
-                    >
-
-
+                    xmlns:local="clr-namespace:BrowseHistory.Controls">
+    
     <ControlTemplate x:Key="HistoryDebugControl" TargetType="{x:Type local:HistoryDebugControl}">
         <Grid Grid.Column="1">
             <GroupBox Header="Test Data Display">
@@ -37,8 +35,7 @@
                     <ListBox Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2"                      
                              ItemsSource="{Binding Locations, RelativeSource={RelativeSource Mode=TemplatedParent}}"
                              IsEnabled="False"
-                             SelectedItem="{Binding SelectedLocation, RelativeSource={RelativeSource Mode=TemplatedParent}}"
-                            >
+                             SelectedItem="{Binding SelectedLocation, RelativeSource={RelativeSource Mode=TemplatedParent}}"                            >
                         <ListBox.ItemTemplate>
                             <DataTemplate>
                                 <TextBlock Text="{Binding Path}"/>

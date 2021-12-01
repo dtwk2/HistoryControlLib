@@ -9,7 +9,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\BrowseHistory\BrowseHistory.csproj" />
-    <ProjectReference Include="..\NavigationHistory.Controls\NavigationHistory.Controls.csproj" />
+    <ProjectReference Include="..\NavigationHistory.Controls\BrowseHistory.Controls.csproj" />
   </ItemGroup>
 
 </Project>

@@ -70,7 +70,7 @@
                 if (handler != null)
                     handler(this, new PropertyChangedEventArgs(propertyName));
             }
-            catch
+            catch(Exception ex)
             {
             }
         }

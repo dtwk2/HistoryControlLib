@@ -101,10 +101,6 @@
       <Project>{978c8df8-3a79-4d7a-aed8-90eefa7a1a26}</Project>
       <Name>BrowseHistory</Name>
     </ProjectReference>
-    <ProjectReference Include="..\HistoryControlLib\HistoryControlLib.csproj">
-      <Project>{93394321-71d7-47a8-86b5-76aff001c9a2}</Project>
-      <Name>HistoryControlLib</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf">

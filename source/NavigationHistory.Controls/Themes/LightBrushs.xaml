@@ -37,7 +37,7 @@
     
     <!-- MouseOver Keys -->
     <Color x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type reskeys:ResourceKeys},
-           ResourceId=ControlMouseOverBackgroundKey}">#108F8F8F</Color>
+           ResourceId=ControlMouseOverBackgroundKey}">LightGray</Color>
 
     <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type reskeys:ResourceKeys},
                      ResourceId=ControlMouseOverBackgroundBrushKey}"

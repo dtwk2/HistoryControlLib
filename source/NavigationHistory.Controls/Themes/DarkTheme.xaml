@@ -2,7 +2,7 @@
 
     <ResourceDictionary.MergedDictionaries>
       
-        <ResourceDictionary Source="pack://application:,,,/NavigationHistory.Controls;component/Themes/DarkBrushs.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/BrowseHistory.Controls;component/Themes/DarkBrushs.xaml" />
     </ResourceDictionary.MergedDictionaries>
 
 </ResourceDictionary>

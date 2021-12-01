@@ -3,11 +3,12 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
     <ResourceDictionary.MergedDictionaries>
-        <ResourceDictionary Source="pack://application:,,,/NavigationHistory.Controls;component/Styles/HistoryButtonStyle.xaml" />
-        <ResourceDictionary Source="pack://application:,,,/NavigationHistory.Controls;component/Themes/LightTheme.xaml" />
-        <ResourceDictionary Source="pack://application:,,,/NavigationHistory.Controls;component/HistoryNavigationControl.xaml" />
-        <ResourceDictionary Source="pack://application:,,,/NavigationHistory.Controls;component/HistoryDebugControl.xaml" />
-        <ResourceDictionary Source="pack://application:,,,/NavigationHistory.Controls;component/LocationsDropDown.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/BrowseHistory.Controls;component/Styles/HistoryButtonStyle.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/BrowseHistory.Controls;component/HistoryNavigationControl.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/BrowseHistory.Controls;component/HistoryDebugControl.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/BrowseHistory.Controls;component/LocationsDropDown.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/BrowseHistory.Controls;component/Themes/LightTheme.xaml" />
+
     </ResourceDictionary.MergedDictionaries>
 
 </ResourceDictionary>

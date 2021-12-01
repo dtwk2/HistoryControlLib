@@ -2,17 +2,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31710.8
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BrowseHistoryDemo", "BrowseHistoryDemo\BrowseHistoryDemo.csproj", "{4D2E6726-2FCC-4085-97A0-AB77B8E78358}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BrowseHistory", "BrowseHistory\BrowseHistory.csproj", "{978C8DF8-3A79-4D7A-AED8-90EEFA7A1A26}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Components", "Components", "{93D408BA-AD96-41C7-9BA1-83727BB3546E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BrowseHistory.Demo", "History.Demo\BrowseHistory.Demo.csproj", "{6D3E4FA8-94C1-4CC7-A95A-4B428970579E}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HistoryControlLib", "HistoryControlLib\HistoryControlLib.csproj", "{93394321-71D7-47A8-86B5-76AFF001C9A2}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BrowseHistory", "BrowseHistory\BrowseHistory.csproj", "{978C8DF8-3A79-4D7A-AED8-90EEFA7A1A26}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NavigationHistory.Demo", "History.Demo\NavigationHistory.Demo.csproj", "{6D3E4FA8-94C1-4CC7-A95A-4B428970579E}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NavigationHistory.Controls", "NavigationHistory.Controls\NavigationHistory.Controls.csproj", "{5F78E0D7-A5B8-4E54-83EC-FF0A0DC3CB00}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BrowseHistory.Controls", "NavigationHistory.Controls\BrowseHistory.Controls.csproj", "{5F78E0D7-A5B8-4E54-83EC-FF0A0DC3CB00}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -24,30 +18,6 @@ Global
 		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{4D2E6726-2FCC-4085-97A0-AB77B8E78358}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{4D2E6726-2FCC-4085-97A0-AB77B8E78358}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{4D2E6726-2FCC-4085-97A0-AB77B8E78358}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{4D2E6726-2FCC-4085-97A0-AB77B8E78358}.Debug|x64.Build.0 = Debug|Any CPU
-		{4D2E6726-2FCC-4085-97A0-AB77B8E78358}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{4D2E6726-2FCC-4085-97A0-AB77B8E78358}.Debug|x86.Build.0 = Debug|Any CPU
-		{4D2E6726-2FCC-4085-97A0-AB77B8E78358}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{4D2E6726-2FCC-4085-97A0-AB77B8E78358}.Release|Any CPU.Build.0 = Release|Any CPU
-		{4D2E6726-2FCC-4085-97A0-AB77B8E78358}.Release|x64.ActiveCfg = Release|Any CPU
-		{4D2E6726-2FCC-4085-97A0-AB77B8E78358}.Release|x64.Build.0 = Release|Any CPU
-		{4D2E6726-2FCC-4085-97A0-AB77B8E78358}.Release|x86.ActiveCfg = Release|Any CPU
-		{4D2E6726-2FCC-4085-97A0-AB77B8E78358}.Release|x86.Build.0 = Release|Any CPU
-		{93394321-71D7-47A8-86B5-76AFF001C9A2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{93394321-71D7-47A8-86B5-76AFF001C9A2}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{93394321-71D7-47A8-86B5-76AFF001C9A2}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{93394321-71D7-47A8-86B5-76AFF001C9A2}.Debug|x64.Build.0 = Debug|Any CPU
-		{93394321-71D7-47A8-86B5-76AFF001C9A2}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{93394321-71D7-47A8-86B5-76AFF001C9A2}.Debug|x86.Build.0 = Debug|Any CPU
-		{93394321-71D7-47A8-86B5-76AFF001C9A2}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{93394321-71D7-47A8-86B5-76AFF001C9A2}.Release|Any CPU.Build.0 = Release|Any CPU
-		{93394321-71D7-47A8-86B5-76AFF001C9A2}.Release|x64.ActiveCfg = Release|Any CPU
-		{93394321-71D7-47A8-86B5-76AFF001C9A2}.Release|x64.Build.0 = Release|Any CPU
-		{93394321-71D7-47A8-86B5-76AFF001C9A2}.Release|x86.ActiveCfg = Release|Any CPU
-		{93394321-71D7-47A8-86B5-76AFF001C9A2}.Release|x86.Build.0 = Release|Any CPU
 		{978C8DF8-3A79-4D7A-AED8-90EEFA7A1A26}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{978C8DF8-3A79-4D7A-AED8-90EEFA7A1A26}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{978C8DF8-3A79-4D7A-AED8-90EEFA7A1A26}.Debug|x64.ActiveCfg = Debug|Any CPU

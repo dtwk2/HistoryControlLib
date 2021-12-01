@@ -6,7 +6,8 @@
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="pack://application:,,,/NavigationHistory.Controls;component/Themes/Generic.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/BrowseHistory.Controls;component/Themes/Generic.xaml" />
+                <!--<ResourceDictionary Source="pack://application:,,,/BrowseHistory.Controls;component/Themes/DarkTheme.xaml" />-->
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>

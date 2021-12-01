@@ -3,8 +3,8 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:demo1="clr-namespace:HistoryControlLib.Controls;assembly=NavigationHistory.Controls" 
-        xmlns:viewmodels1="clr-namespace:BrowserHistoryDemoLib.ViewModels"
+        xmlns:viewmodels1="clr-namespace:BrowserHistoryDemoLib.ViewModels" 
+        xmlns:demo11="clr-namespace:BrowseHistory.Controls;assembly=BrowseHistory.Controls"
         mc:Ignorable="d"
         Title="MainWindow" Height="800" Width="800">
     
@@ -18,21 +18,23 @@
         </Grid.ColumnDefinitions>
 
         <!-- Implements the recent locations browsing controls back, forward, up buttons ... -->
-        <demo1:HistoryNavigationControl BackwardCommand="{Binding BackwardCommand}" 
+        <demo11:HistoryNavigationControl BackwardCommand="{Binding BackwardCommand}" 
                                         VerticalAlignment="Top"
                                        ForwardCommand="{Binding ForwardCommand}"
                                        UpCommand="{Binding UpCommand}"
-                                       BackwardPath="{Binding NaviHistory.NextBackwardItem.Path}"
-                                       ForwardPath="{Binding NaviHistory.NextForewardItem.Path}"
-                                       Locations="{Binding NaviHistory.Locations}"
-                                       SelectionChanged="{Binding SelectionChanged}"
+                                       BackwardPath="{Binding BackwardText}"
+                                       ForwardPath="{Binding ForwardText}"
+                                         ForwardCount="{Binding ForwardCount}"
+                                         BackwardCount="{Binding BackwardCount}"
+                                       Locations="{Binding Collection}"
+                                       SelectionChanged="{Binding SelectionCommand}"
                                        />
 
-        <demo1:HistoryDebugControl Grid.Column="1" 
-                                     SelectedLocation="{Binding NaviHistory.SelectedItem}"
-                                     SelectedPath="{Binding NaviHistory.SelectedItem.Path}"
-                                     Locations="{Binding NaviHistory.Locations}"
-                                     ForwardLocationCommand="{Binding ForwardLocationCommand}"
+        <demo11:HistoryDebugControl Grid.Column="1" 
+                                     SelectedLocation="{Binding CurrentItem}"
+                                     SelectedPath="{Binding CurrentItem.Path}"
+                                     Locations="{Binding Collection}"
+                                     ForwardLocationCommand="{Binding SelectionCommand}"
                                      />
     </Grid>
 </Window>

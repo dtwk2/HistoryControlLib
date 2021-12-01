@@ -1,0 +1,13 @@
+<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="pack://application:,,,/NavigationHistory.Controls;component/Styles/HistoryButtonStyle.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/NavigationHistory.Controls;component/Themes/LightTheme.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/NavigationHistory.Controls;component/HistoryNavigationControl.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/NavigationHistory.Controls;component/HistoryDebugControl.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/NavigationHistory.Controls;component/LocationsDropDown.xaml" />
+    </ResourceDictionary.MergedDictionaries>
+
+</ResourceDictionary>

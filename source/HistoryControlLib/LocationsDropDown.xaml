@@ -125,6 +125,67 @@
         </ControlTemplate.Triggers>
     </ControlTemplate>
 
+    <ControlTemplate x:Key="ComboBoxItem" TargetType="{x:Type ComboBoxItem}">
+        <Border Name="Bd"
+                                        Background="{TemplateBinding Background}"
+                                        BorderBrush="{TemplateBinding BorderBrush}"
+                                        BorderThickness="{TemplateBinding BorderThickness}"
+                                        Padding="{TemplateBinding Padding}"
+                                        SnapsToDevicePixels="true">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+
+                <TextBlock FontFamily="Segoe UI Symbol"
+                                                   Text="X"
+                                                   Margin="0,0,6,0"
+                                                   x:Name="MeasurTextBlock"
+                                                   Visibility="Hidden"
+                                                   />
+
+                <TextBlock FontFamily="Segoe UI Symbol"
+                                                   Text=" "
+                                                   Margin="0,0,6,0"
+                                                   MinWidth="{Binding ElementName=MeasurTextBlock,Path=ActualWidth}"
+                                                   x:Name="ItemIndicator"
+                                                   />
+
+                <ContentPresenter
+                                            Grid.Column="1"
+                                            HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                            VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                            SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+            </Grid>
+        </Border>
+        <ControlTemplate.Triggers>
+            <Trigger Property="IsSelected" Value="True">
+                <!-- Show selected item as selected until another item is selected -->
+                <Setter TargetName="Bd" Property="Background" Value="{DynamicResource {x:Static reskeys:ResourceKeys.ControlItemBackgroundSelectedKey}}"/>
+                <Setter Property="Foreground" Value="{DynamicResource {x:Static reskeys:ResourceKeys.ControlItemTextSelectedKey}}"/>
+                <!-- Show a checkmark before selected item -->
+                <Setter TargetName="ItemIndicator" Property="Text" Value="&#x2714;"/>
+            </Trigger>
+            <Trigger Property="IsHighlighted" Value="true">
+                <Setter TargetName="Bd" Property="Background" Value="{DynamicResource {x:Static reskeys:ResourceKeys.ControlItemBackgroundSelectedKey}}"/>
+                <Setter Property="Foreground" Value="{DynamicResource {x:Static reskeys:ResourceKeys.ControlItemTextSelectedKey}}"/>
+            </Trigger>
+            <Trigger Property="IsEnabled" Value="false">
+                <Setter Property="Foreground" Value="{DynamicResource ItemTextDisabled}"/>
+            </Trigger>
+        </ControlTemplate.Triggers>
+    </ControlTemplate>
+
+    <Style x:Key="ComboBoxStyle" TargetType="{x:Type ComboBoxItem}">
+        <Setter Property="HorizontalContentAlignment" Value="{Binding Path=HorizontalContentAlignment,RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"/>
+        <Setter Property="VerticalContentAlignment" Value="{Binding Path=VerticalContentAlignment,RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"/>
+        <Setter Property="Padding" Value="7,2,8,2"/>
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="Template" Value="{StaticResource ComboBoxItem}"/>
+    </Style>
+    
     <!-- =============================================================================== -->
     <!-- LocationsDropDown Style                                                         -->
     <!-- =============================================================================== -->
@@ -139,72 +200,7 @@
         <Setter Property="Template" Value="{StaticResource LocationsDropDownTemplate}" />
         <Setter Property="VerticalContentAlignment" Value="Stretch" />
         <Setter Property="HorizontalContentAlignment" Value="Stretch" />
-        <Setter Property="ItemContainerStyle">
-            <Setter.Value>
-                <Style TargetType="{x:Type ComboBoxItem}">
-                    <Setter Property="HorizontalContentAlignment" Value="{Binding Path=HorizontalContentAlignment,RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"/>
-                    <Setter Property="VerticalContentAlignment" Value="{Binding Path=VerticalContentAlignment,RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"/>
-                    <Setter Property="Padding" Value="7,2,8,2"/>
-                    <Setter Property="BorderThickness" Value="0" />
-                    <Setter Property="Background" Value="Transparent"/>
-                    <Setter Property="Template">
-                        <Setter.Value>
-                            <ControlTemplate TargetType="{x:Type ComboBoxItem}">
-                                <Border Name="Bd"
-                                        Background="{TemplateBinding Background}"
-                                        BorderBrush="{TemplateBinding BorderBrush}"
-                                        BorderThickness="{TemplateBinding BorderThickness}"
-                                        Padding="{TemplateBinding Padding}"
-                                        SnapsToDevicePixels="true">
-                                    <Grid>
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="Auto" />
-                                            <ColumnDefinition Width="*" />
-                                        </Grid.ColumnDefinitions>
-
-                                        <TextBlock FontFamily="Segoe UI Symbol"
-                                                   Text="X"
-                                                   Margin="0,0,6,0"
-                                                   x:Name="MeasurTextBlock"
-                                                   Visibility="Hidden"
-                                                   />
-
-                                        <TextBlock FontFamily="Segoe UI Symbol"
-                                                   Text=" "
-                                                   Margin="0,0,6,0"
-                                                   MinWidth="{Binding ElementName=MeasurTextBlock,Path=ActualWidth}"
-                                                   x:Name="ItemIndicator"
-                                                   />
-
-                                        <ContentPresenter
-                                            Grid.Column="1"
-                                            HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-                                            VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
-                                            SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
-                                    </Grid>
-                                </Border>
-                                <ControlTemplate.Triggers>
-                                    <Trigger Property="IsSelected" Value="True">
-                                        <!-- Show selected item as selected until another item is selected -->
-                                        <Setter TargetName="Bd" Property="Background" Value="{DynamicResource {x:Static reskeys:ResourceKeys.ControlItemBackgroundSelectedKey}}"/>
-                                        <Setter Property="Foreground" Value="{DynamicResource {x:Static reskeys:ResourceKeys.ControlItemTextSelectedKey}}"/>
-                                        <!-- Show a checkmark before selected item -->
-                                        <Setter TargetName="ItemIndicator" Property="Text" Value="&#x2714;"/>
-                                    </Trigger>
-                                    <Trigger Property="IsHighlighted" Value="true">
-                                        <Setter TargetName="Bd" Property="Background" Value="{DynamicResource {x:Static reskeys:ResourceKeys.ControlItemBackgroundSelectedKey}}"/>
-                                        <Setter Property="Foreground" Value="{DynamicResource {x:Static reskeys:ResourceKeys.ControlItemTextSelectedKey}}"/>
-                                    </Trigger>
-                                    <Trigger Property="IsEnabled" Value="false">
-                                        <Setter Property="Foreground" Value="{DynamicResource ItemTextDisabled}"/>
-                                    </Trigger>
-                                </ControlTemplate.Triggers>
-                            </ControlTemplate>
-                        </Setter.Value>
-                    </Setter>
-                </Style>
-            </Setter.Value>
-        </Setter>
+        <Setter Property="ItemContainerStyle" Value="{StaticResource ComboBoxStyle}"/>
     </Style>
 
     <Style TargetType="{x:Type local:LocationsDropDown}" BasedOn="{StaticResource LocationsDropDownBox}" />

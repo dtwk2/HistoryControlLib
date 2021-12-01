@@ -3,7 +3,10 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
     <ResourceDictionary.MergedDictionaries>
-        <ResourceDictionary Source="pack://application:,,,/HistoryControlLib;component/Themes/LightTheme.xaml" />
+        <!--<ResourceDictionary Source="pack://application:,,,/HistoryControlLib;component/Themes/LightTheme.xaml" />-->
+        <ResourceDictionary Source="pack://application:,,,/HistoryControlLib;component/HistoryNavigationControl.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/HistoryControlLib;component/HistoryDebugControl.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/HistoryControlLib;component/LocationsDropDown.xaml" />
     </ResourceDictionary.MergedDictionaries>
 
 </ResourceDictionary>

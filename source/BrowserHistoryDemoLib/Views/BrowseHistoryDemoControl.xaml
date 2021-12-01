@@ -3,10 +3,13 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-
+             d:Background="White"
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300">
-    <Grid xmlns:BHreskeys="clr-namespace:HistoryControlLib.Themes;assembly=HistoryControlLib"
+             d:DesignHeight="50" d:DesignWidth="100">
+    
+    <Grid 
+        x:Name="MainGrid"
+        xmlns:BHreskeys="clr-namespace:HistoryControlLib.Themes;assembly=HistoryControlLib"
 		      xmlns:controls="clr-namespace:HistoryControlLib.Controls;assembly=HistoryControlLib"
               xmlns:behav="clr-namespace:HistoryControlLib.Behaviors;assembly=HistoryControlLib"
               >
@@ -25,8 +28,7 @@
                     Command="{Binding BackwardCommand}"
                     HorizontalAlignment="Right" VerticalAlignment="Stretch"
                     HorizontalContentAlignment="Right" VerticalContentAlignment="Stretch"
-                    Style="{DynamicResource {x:Static BHreskeys:ResourceKeys.HistoryButtonStyleKey}}"
-                >
+                    Style="{DynamicResource {x:Static BHreskeys:ResourceKeys.HistoryButtonStyleKey}}"               >
             <Button.ToolTip>
                 <TextBlock>
                         <TextBlock Text="Back to: "/>
@@ -86,7 +88,7 @@
                 Grid.Column="2"
                 ItemsSource="{Binding NaviHistory.Locations}"
                 HorizontalAlignment="Left"
-                behav:SelectionChangedCommand.ChangedCommand="{Binding SelectionChanged}"
+                
                 SelectedItem="{Binding NaviHistory.SelectedItem,Mode=OneWay,UpdateSourceTrigger=PropertyChanged}"
                 ToolTip="Recent Locations"
             >

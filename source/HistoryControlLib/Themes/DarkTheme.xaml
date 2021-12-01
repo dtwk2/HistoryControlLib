@@ -2,7 +2,6 @@
 
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="pack://application:,,,/HistoryControlLib;component/Styles/HistoryButtonStyle.xaml" />
-        <ResourceDictionary Source="pack://application:,,,/HistoryControlLib;component/Controls/LocationsDropDown.xaml" />
         <ResourceDictionary Source="pack://application:,,,/HistoryControlLib;component/Themes/DarkBrushs.xaml" />
     </ResourceDictionary.MergedDictionaries>
 

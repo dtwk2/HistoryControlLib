@@ -2,12 +2,13 @@ namespace BrowserHistoryDemoLib.ViewModels
 {
     using BrowserHistoryDemoLib.ViewModels.Base;
     using HistoryControlLib.Interfaces;
+    using HistoryControlLib.ViewModels.Base;
     using System;
     using System.IO;
     using System.Linq;
     using System.Windows.Input;
 
-    public class AppViewModel : Base.BaseViewModel
+    public class AppViewModel : BaseViewModel
     {
         #region fields
         private ICommand _SelectionChanged;
@@ -22,7 +23,7 @@ namespace BrowserHistoryDemoLib.ViewModels
         /// </summary>
         public AppViewModel()
         {
-            NaviHistory = HistoryControlLib.Factory<LocationItem>.CreateBrowseNavigator();
+            NaviHistory = HistoryControlLib.Factory<PathItem>.CreateBrowseNavigator();
         }
 
         /// <summary>
@@ -32,7 +33,7 @@ namespace BrowserHistoryDemoLib.ViewModels
         /// - forward and backward navigation, and
         /// - selection of any position within the given set of locations.
         /// </summary>
-        public IBrowseHistory<LocationItem> NaviHistory { get; }
+        public IBrowseHistory<PathItem> NaviHistory { get; }
 
         /// <summary>
         /// Command executes when the user has selected
@@ -49,7 +50,7 @@ namespace BrowserHistoryDemoLib.ViewModels
                  {
                      if (!(p is object[] parameters) ||
                      parameters.Length == 0 ||
-                     !(parameters[0] is LocationItem item)
+                     !(parameters[0] is PathItem item)
                      || !(NaviHistory.Locations
                      .Select((histItem, i) => Tuple.Create(i, Equals(histItem, item)))
                      .SingleOrDefault(a => a.Item2) is Tuple<int, bool> tuple))
@@ -99,7 +100,7 @@ namespace BrowserHistoryDemoLib.ViewModels
                 {
                     var param = p as string;
 
-                    NaviHistory.Forward(new LocationItem(param));
+                    NaviHistory.Forward(new PathItem(param));
                 });             
             }
         }
@@ -138,7 +139,7 @@ namespace BrowserHistoryDemoLib.ViewModels
                         try
                         {
                             if (System.IO.Directory.GetParent(NaviHistory.SelectedItem.Path) is DirectoryInfo parent)
-                                NaviHistory.Forward(new LocationItem(parent.FullName));
+                                NaviHistory.Forward(new PathItem(parent.FullName));
                         }
                         catch
                         {
@@ -163,20 +164,5 @@ namespace BrowserHistoryDemoLib.ViewModels
                 return _UpCommand;
             }
         }
-
-        /// <summary>
-        /// Initializes the Navigational History with sample items.
-        /// </summary>
-        public void Init()
-        {
-            NaviHistory.Forward(new LocationItem(@"C:\"));
-            NaviHistory.Forward(new LocationItem(@"F:\Program Files\My Program\My  Dir 1\My  Dir 2"));
-            NaviHistory.Forward(new LocationItem(@"F:\"));
-            NaviHistory.Forward(new LocationItem(@"F:\Temp"));
-            NaviHistory.Forward(new LocationItem(@"F:\Temp\More Files"));
-            NaviHistory.Forward(new LocationItem(@"G:\"));
-            NaviHistory.Forward(new LocationItem(@"H:\"));
-        }
-
     }
 }

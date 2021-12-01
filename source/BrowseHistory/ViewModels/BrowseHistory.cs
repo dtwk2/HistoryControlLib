@@ -4,6 +4,7 @@ namespace HistoryControlLib.ViewModels
     using System;
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
+    using System.Threading;
     using System.Windows;
 
     /// <summary>
@@ -14,7 +15,7 @@ namespace HistoryControlLib.ViewModels
     {
         #region fields
         const int ListLimit = 128;
-
+        private readonly SynchronizationContext context;
         private readonly ObservableCollection<T> _Locations;
         private int _SelectedIndex = -1;
         #endregion fields
@@ -25,6 +26,7 @@ namespace HistoryControlLib.ViewModels
         /// </summary>
         public BrowseHistory()
         {
+            context = SynchronizationContext.Current;
             _Locations = new ObservableCollection<T>();
         }
         #endregion ctors
@@ -33,24 +35,12 @@ namespace HistoryControlLib.ViewModels
         /// <summary>
         /// Gets a list of recently visited locations.
         /// </summary>
-        public IEnumerable<T> Locations
-        {
-            get
-            {
-                return _Locations;
-            }
-        }
+        public IEnumerable<T> Locations => _Locations;
 
         /// <summary>
         /// Gets the size of the currently available list of locations.
         /// </summary>
-        public int Count
-        {
-            get
-            {
-                return _Locations.Count;
-            }
-        }
+        public int Count => _Locations.Count;
 
         /// <summary>
         /// Gets a current visiting location (if any) or
@@ -58,23 +48,13 @@ namespace HistoryControlLib.ViewModels
         /// </summary>
         public int SelectedIndex
         {
-            get
-            {
-                return _SelectedIndex;
-            }
-
+            get => _SelectedIndex;
             private set
             {
                 if (_SelectedIndex != value)
                 {
                     _SelectedIndex = value;
-                    NotifyPropertyChanged(() => SelectedIndex);
-                    NotifyPropertyChanged(() => SelectedItem);
-
-                    NotifyPropertyChanged(() => CanBackward);
-                    NotifyPropertyChanged(() => CanForward);
-                    NotifyPropertyChanged(() => NextForwardItem);
-                    NotifyPropertyChanged(() => NextBackwardItem);
+                    OnPropertyChanged(null);
                 }
             }
         }
@@ -83,77 +63,33 @@ namespace HistoryControlLib.ViewModels
         /// Gets the currently selected item or default(t) (usually null)
         /// if there is no currently selected item.
         /// </summary>
-        public T SelectedItem
-        {
-            get
-            {
-                if (_SelectedIndex >= 0 && _SelectedIndex <_Locations.Count)
-                    return _Locations[_SelectedIndex];
-
-                return default(T);
-            }
-        }
+        public T SelectedItem => _SelectedIndex >= 0 && _SelectedIndex < _Locations.Count ? _Locations[_SelectedIndex] : default(T);
 
         /// <summary>
         /// Gets the item that would be selected next if we where to navigate back to the
         /// next item (if any) in the current list of recent locations.
         /// </summary>
-        public T NextBackwardItem
-        {
-            get
-            {
-                if (CanBackward == false)
-                    return default(T);
-
-                return _Locations[SelectedIndex + 1];
-            }
-        }
+        public T NextBackwardItem => CanBackward == false ? default(T) : _Locations[SelectedIndex + 1];
 
         /// <summary>
         /// Gets the item that would be selected next if we where to navigate back to the
         /// next item (if any) in the current list of recent locations.
         /// </summary>
-        public T NextForwardItem
-        {
-            get
-            {
-                if (CanForward == false)
-                    return default(T);
-
-                return _Locations[SelectedIndex - 1];
-            }
-        }
+        public T NextForwardItem => CanForward == false ? default(T) : _Locations[SelectedIndex - 1];
 
         /// <summary>
         /// Determines if forward navigation within the current set of locations
         /// is possible (returns true) - based on set of locations and SelectedIndex
         /// or not (returns false).
         /// </summary>
-        public bool CanForward
-        {
-            get
-            {
-                if (SelectedIndex > 0)
-                    return true;
-
-                return false;
-            }
-        }
+        public bool CanForward => SelectedIndex > 0;
 
         /// <summary>
         /// Determines if backward navigation is possible (returns true)
         /// (based on set of locations and SelectedIndex) or not (returns false).
         /// </summary>
-        public bool CanBackward
-        {
-            get
-            {
-                if ((SelectedIndex + 1) < _Locations.Count)
-                    return true;
+        public bool CanBackward => (SelectedIndex + 1) < _Locations.Count;
 
-                return false;
-            }
-        }
         #endregion properties
 
         #region methods
@@ -163,11 +99,11 @@ namespace HistoryControlLib.ViewModels
         /// </summary>
         public void ClearLocations()
         {
-            Application.Current.Dispatcher.Invoke(new Action(() =>
+            context.Send(a =>
             {
                 _Locations.Clear();
                 SelectedIndex = -1;
-            }));
+            },null);
         }
 
         /// <summary>
@@ -202,12 +138,11 @@ namespace HistoryControlLib.ViewModels
         {
             if (SelectedIndex >= 0)
             {
-                var equi = newLocation as IEqualityComparer<T>;
-                if (equi != null)
+                if (newLocation is IEqualityComparer<T> equi)
                 {
                     // Do nothing if a forward on the current location appears
                     // to describe the requested location
-                    if (equi.Equals(newLocation, _Locations[SelectedIndex]) == true)
+                    if (equi.Equals(newLocation, _Locations[SelectedIndex]))
                         return;
                 }
             }
@@ -231,9 +166,7 @@ namespace HistoryControlLib.ViewModels
 
             if (_Locations.Count > ListLimit)        // Make sure list cannot grow beyond useful size
             {
-                int delta = _Locations.Count - ListLimit;
-
-                for (int i = 0; i < delta; i++)
+                for (int i = 0; i < _Locations.Count - ListLimit; i++)
                 {
                     RemoveLocationAt(_Locations.Count - 1);  // Always remove last element
                 }
@@ -313,26 +246,26 @@ namespace HistoryControlLib.ViewModels
         /// <param name="item"></param>
         private void ReplaceLocationAt(int pos, T item)
         {
-            Application.Current.Dispatcher.Invoke(new Action(() =>
+            context.Send(a =>
             {
                 _Locations[pos] = item;   // Update this item to recycle spot in list
-            }));
+            },null);
         }
 
         private void InsertLocationAt(int pos, T item)
         {
-            Application.Current.Dispatcher.Invoke(new Action(() =>
+            context.Send(a =>
             {
                 _Locations.Insert(pos, item);    // SelectedIndex = 0;
-            }));
+            }, null);
         }
 
         private void RemoveLocationAt(int pos)
         {
-            Application.Current.Dispatcher.Invoke(new Action(() =>
+            context.Send(a =>
             {
                 _Locations.RemoveAt(pos);    // SelectedIndex = 0;
-            }));
+            }, null);
         }
         #endregion methods
     }

@@ -54,6 +54,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="ViewModels\AppViewModel.cs" />
+    <Compile Include="ViewModels\Base\RelayCommand.cs" />
+    <Compile Include="ViewModels\PathItem.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -94,14 +97,19 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\BrowserHistoryDemoLib\BrowserHistoryDemoLib.csproj">
-      <Project>{d0ca35bb-2ec3-42d6-a329-d86ef8287dc7}</Project>
-      <Name>BrowserHistoryDemoLib</Name>
+    <ProjectReference Include="..\BrowseHistory\BrowseHistory.csproj">
+      <Project>{978c8df8-3a79-4d7a-aed8-90eefa7a1a26}</Project>
+      <Name>BrowseHistory</Name>
     </ProjectReference>
     <ProjectReference Include="..\HistoryControlLib\HistoryControlLib.csproj">
       <Project>{93394321-71d7-47a8-86b5-76aff001c9a2}</Project>
       <Name>HistoryControlLib</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf">
+      <Version>1.1.31</Version>
+    </PackageReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

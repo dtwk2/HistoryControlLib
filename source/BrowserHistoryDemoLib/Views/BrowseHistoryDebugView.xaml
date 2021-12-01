@@ -3,10 +3,11 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300">
-    <Grid Grid.Column="1">
+             d:Background="White"
+             d:DesignHeight="100" d:DesignWidth="300">
+
+    <Grid Grid.Column="1" x:Name="MainGrid">
         <GroupBox Header="Test Data Display">
             <Grid>
                 <Grid.RowDefinitions>
@@ -22,25 +23,19 @@
                 </Grid.ColumnDefinitions>
 
                 <Label Content="Selected Location:" HorizontalAlignment="Right"/>
-                <TextBox DataContext="{Binding NaviHistory.SelectedItem}"
-                             Text="{Binding Path,Mode=OneWay,UpdateSourceTrigger=PropertyChanged}"
+                <TextBox Text="{Binding SelectedPath,RelativeSource={RelativeSource Mode=TemplatedParent}}"
                              Name="NewPathInputBox"
                              VerticalAlignment="Center"
                              VerticalContentAlignment="Center"
-                             Grid.Column="1"
-                            />
+                             Grid.Column="1"                          />
                 <Button Grid.Column="2" Content="Go" Padding="3" Margin="3" MinHeight="23"
-                            Command="{Binding ForwardLocationCommand}"
-                            CommandParameter="{Binding ElementName=NewPathInputBox,Path=Text}"
-                            />
-
+                            Command="{Binding ForwardLocationCommand,RelativeSource={RelativeSource Mode=TemplatedParent}}"
+                            CommandParameter="{Binding ElementName=NewPathInputBox,Path=Text}" />
                 <Label Grid.Row="1" Grid.Column="0" Content="Locations:" HorizontalAlignment="Right"/>
-                <ListBox Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2"
-                             DataContext="{Binding NaviHistory}"
-                             ItemsSource="{Binding Locations, Mode=OneWay,UpdateSourceTrigger=PropertyChanged}"
+                <ListBox Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2"                      
+                             ItemsSource="{Binding Locations,RelativeSource={RelativeSource Mode=TemplatedParent}}"
                              IsEnabled="False"
-                             SelectedItem="{Binding SelectedItem,Mode=OneWay,UpdateSourceTrigger=PropertyChanged}"
-                            >
+                             SelectedItem="{Binding SelectedItem,RelativeSource={RelativeSource Mode=TemplatedParent}}">
                     <ListBox.ItemTemplate>
                         <DataTemplate>
                             <TextBlock Text="{Binding Path}"/>

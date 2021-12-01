@@ -1,12 +1,13 @@
-﻿<Application x:Class="BrowseHistoryDemo.App"
+﻿<Application x:Class="History.Demo.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:History.Demo"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <!--<ResourceDictionary Source="pack://application:,,,/HistoryControlLib;component/Themes/Generic.xaml" />-->
+                <ResourceDictionary Source="pack://application:,,,/NavigationHistory.Controls;component/Themes/Generic.xaml" />
             </ResourceDictionary.MergedDictionaries>
-        </ResourceDictionary>         
+        </ResourceDictionary>
     </Application.Resources>
 </Application>

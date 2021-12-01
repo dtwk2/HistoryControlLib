@@ -1,4 +1,4 @@
-﻿namespace BrowserHistoryDemoLib.ViewModels.Base
+﻿namespace HistoryControlLib.ViewModels.Base
 {
     using System;
     using System.ComponentModel;
@@ -61,7 +61,7 @@
         /// and IsSelected is a property.
         /// </summary>
         /// <param name="propertyName">Name of property to refresh</param>
-        private void OnPropertyChanged(string propertyName)
+        protected void OnPropertyChanged(string propertyName)
         {
             try
             {

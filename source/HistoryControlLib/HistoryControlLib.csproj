@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
 
   <PropertyGroup>
-    <TargetFrameworks>net4;netcoreapp3.0</TargetFrameworks>
+    <TargetFrameworks>net4.5;netcoreapp3.1</TargetFrameworks>
     <UseWPF>true</UseWPF>
   </PropertyGroup>
 
@@ -27,7 +27,15 @@
     </PropertyGroup>
 
   <ItemGroup>
-    <Page Update="Controls\LocationsDropDown.xaml">
+    <Page Update="HistoryDebugControl.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="HistoryNavigationControl.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="LocationsDropDown.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Styles\HistoryButtonStyle.xaml">
@@ -51,4 +59,16 @@
     </Page>
   </ItemGroup>
 
+  <ItemGroup>
+    <Compile Update="HistoryDebugControl.cs">
+      <DependentUpon>HistoryDebugControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="HistoryNavigationControl.cs">
+      <DependentUpon>HistoryNavigationControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="LocationsDropDown.cs">
+      <DependentUpon>LocationsDropDown.xaml</DependentUpon>
+    </Compile>
+
+  </ItemGroup>
 </Project>
